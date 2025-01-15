@@ -12,11 +12,6 @@ async function dbConnect(): Promise<void> {
     return;
   }
   try {
-    console.log(
-      "process.env.NEXT_PUBLIC_MONGO_CONNECT_URI ",
-      process.env.NEXT_PUBLIC_MONGO_CONNECT_URI
-    );
-
     const db = await mongoose.connect(
       process.env.NEXT_PUBLIC_MONGO_CONNECT_URI || "",
       {}
