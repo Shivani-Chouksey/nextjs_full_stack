@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import dbConnect from "@/connection/db.connect";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,8 +23,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await dbConnect();
-
   return (
     <html lang="en">
       <body
