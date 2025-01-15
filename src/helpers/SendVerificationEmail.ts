@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import VerificationEmail from "../../emails/VerifictionEmail";
-const resend = new Resend(process.env.NEXT_PUBLIC_RESENT_API_KEY);
 import { ApiResponse } from "@/types/apiResponse";
+const resend = new Resend(process.env.NEXT_PUBLIC_RESENT_API_KEY);
 
 export async function sendVerificationEmail(
   email: string,
