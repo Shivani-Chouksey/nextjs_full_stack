@@ -17,8 +17,6 @@ export async function GET(request: Request) {
 
     //validate with zods
     const result = UsernameQuerySchema.safeParse(queryParam);
-
-    console.log("result", result);
     if (!result.success) {
       const userNameErrors = result.error?.format().username?._errors || [];
 
@@ -51,7 +49,6 @@ export async function GET(request: Request) {
     );
   } catch (error) {
     console.error("Error Checking Username", error);
-
     return Response.json(
       { success: false, message: "Error checking userName" },
       { status: 500 }
