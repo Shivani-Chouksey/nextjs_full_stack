@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-// import { useDebounceValue } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function SignUpForm() {
   const [usernameMessage, setUsernameMessage] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  //   const debouncedUsername = useDebounceValue(username, 300);
+  const debounced = useDebounceCallback(setUsername, 500);
 
   const router = useRouter();
   const { toast } = useToast();
@@ -119,7 +119,7 @@ export default function SignUpForm() {
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      setUsername(e.target.value);
+                      debounced(e.target.value);
                     }}
                   />
                   {isCheckingUsername && <Loader2 className="animate-spin" />}
