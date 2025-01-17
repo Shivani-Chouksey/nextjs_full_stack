@@ -4,7 +4,7 @@ import UserModel from "@/modal/userModal";
 export async function POST(request: Request) {
   await dbConnect();
   try {
-    const { userName, otpCode } = await request.json();
+    const { userName, verifyCode } = await request.json();
     const decodedUserName = decodeURIComponent(userName);
 
     const user = await UserModel.findOne({ userName: decodedUserName });
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const isCodeVerfied = user.verifyCode === otpCode;
+    const isCodeVerfied = user.verifyCode === verifyCode;
     const isCodeNotExpiry = new Date(user.verifyCodeExpiry) > new Date();
 
     if (isCodeNotExpiry && isCodeVerfied) {

@@ -18,10 +18,13 @@ export const authOptions: NextAuthOptions = {
         try {
           const user = await UserModel.findOne({
             $or: [
-              { email: credentials.identifier },
-              { username: credentials.identifier },
+              { userEmail: credentials.identifier },
+              { userName: credentials.identifier },
             ],
           });
+
+          console.log("user in singin", user);
+
           if (!user) {
             throw new Error("No user found with this email");
           }
@@ -32,6 +35,9 @@ export const authOptions: NextAuthOptions = {
             credentials.password,
             user.password
           );
+
+          console.log("isPasswordCorrect", isPasswordCorrect);
+
           if (isPasswordCorrect) {
             return user;
           } else {
@@ -49,7 +55,7 @@ export const authOptions: NextAuthOptions = {
         token._id = user._id?.toString(); // Convert ObjectId to string
         token.isVerified = user.isVerified;
         token.isAcceptingMessages = user.isAcceptingMessages;
-        token.username = user.username;
+        token.username = user.userName;
       }
       return token;
     },
@@ -58,7 +64,7 @@ export const authOptions: NextAuthOptions = {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
         session.user.isAcceptingMessages = token.isAcceptingMessages;
-        session.user.username = token.username;
+        session.user.username = token.userName;
       }
       return session;
     },
