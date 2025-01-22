@@ -10,26 +10,28 @@ export async function GET() {
 
   // Get the user session
   const session = await getServerSession(authOptions);
-  const user = session?.user;
+  const _user = session?.user;
+  console.log("user", _user);
 
   // Check if the user is authenticated
-  if (!session || !user) {
+  if (!session || !_user) {
     return Response.json(
       { success: false, message: "Not authenticated" },
       { status: 401 }
     );
   }
 
-  const userID = new mongoose.Types.ObjectId(user._id);
+  const userID = new mongoose.Types.ObjectId(_user._id);
+
   try {
-    const user = await UserModel.aggregate([
+    const userResponse = await UserModel.aggregate([
       { $match: { _id: userID } },
-      { $unwind: "$messages" },
-      { $sort: { "messages.createdAt": -1 } },
-      { $group: { _id: "$_id", messages: { $push: "$messages" } } },
+      { $unwind: "$Messages" },
+      { $sort: { "Messages.createdAt": -1 } },
+      { $group: { _id: "$_id", messages: { $push: "$Messages" } } },
     ]).exec();
 
-    if (!user || user.length === 0) {
+    if (!userResponse || userResponse.length === 0) {
       return Response.json(
         { message: "User not found", success: false },
         { status: 404 }
@@ -37,7 +39,7 @@ export async function GET() {
     }
 
     return Response.json(
-      { messages: user[0].messages },
+      { messages: userResponse[0].messages },
       {
         status: 200,
       }
